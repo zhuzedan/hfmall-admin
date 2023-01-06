@@ -10,12 +10,18 @@
     </el-breadcrumb>
     <el-dropdown>
       <span class="el-dropdown-link">
-        <el-avatar shape="square" :size="40" :src="userInfo.headUrl"></el-avatar>
+        <el-avatar
+          shape="square"
+          :size="40"
+          :src="userInfo.headUrl"
+        ></el-avatar>
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>{{userInfo.name}}</el-dropdown-item>
-        <el-dropdown-item>退出登录</el-dropdown-item>
+        <el-dropdown-item>{{ userInfo.name }}</el-dropdown-item>
+        <el-dropdown-item @click.native="handleLogout"
+          >退出登录</el-dropdown-item
+        >
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -43,6 +49,23 @@ export default {
       console.log(res)
       this.userInfo = res.data.data
     })
+  },
+  methods: {
+    handleLogout () {
+      this.$confirm('确定要退出吗','退出提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      .then(() => {
+        this.$store.commit('saveTokenInfo',null)
+        this.$message.success('成功退出')
+        this.$router.push('/login')
+      })
+      .catch(() => {
+        this.$message.info('取消退出登录')
+      })
+    }
   }
 }
 </script>

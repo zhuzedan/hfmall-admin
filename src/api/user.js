@@ -1,6 +1,6 @@
 import request from '@/utils/request'
-import store from '@/store/index'
 
+// 登录
 export const login = (formData) => {
   return request({
     method: 'POST',
@@ -13,9 +13,6 @@ export const login = (formData) => {
 export const getUserInfo = () => {
   return request({
     method: 'GET',
-    url: '/systemuser/info',
-    headers: {
-      Authorization: store.state.tokenInfo?.tokenHead+' '+store.state.tokenInfo?.token
-    }
+    url: '/systemuser/info'
   })
 }

@@ -10,20 +10,23 @@
     </el-breadcrumb>
     <el-dropdown>
       <span class="el-dropdown-link">
-        <el-avatar shape="square" :size="40" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+        <el-avatar shape="square" :size="40" :src="userInfo.headUrl"></el-avatar>
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>用户信息</el-dropdown-item>
+        <el-dropdown-item>{{userInfo.name}}</el-dropdown-item>
         <el-dropdown-item>退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
 </template>
 <script>
+import { getUserInfo } from '@/api/user'
 export default {
   data () {
-    return {}
+    return {
+      userInfo: {}
+    }
   },
   props: {
     isCollapse: {
@@ -34,6 +37,12 @@ export default {
       type: Function,
       required: true
     }
+  },
+  created () {
+    getUserInfo().then((res) => {
+      console.log(res)
+      this.userInfo = res.data.data
+    })
   }
 }
 </script>

@@ -13,7 +13,7 @@
       :default-expand-all="false"
       :tree-props="{children: 'children'}">
 
-      <el-table-column prop="name" label="菜单名称" width="160"/>
+      <el-table-column prop="name" label="名称" width="160"/>
       <el-table-column label="图标" width="100">
         <template slot-scope="scope">
           <i :class="scope.row.icon"></i>
@@ -24,14 +24,14 @@
       <el-table-column prop="component" label="组件路径" width="160"/>
       <el-table-column prop="sortValue" label="排序" width="60"/>
       <el-table-column label="状态" width="80">
-        <template slot-scope="scope">
+        <template>
           <el-switch
-            v-model="scope.row.status === 1" disabled="true">
+             disabled="true">
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="createTime" label="创建时间" width="160"/>
-      <el-table-column label="操作" width="180" align="center" fixed="right">
+      <el-table-column label="操作" width="180" fixed="right">
         <template slot-scope="scope">
           <el-button type="success" v-if="scope.row.type !== 2" icon="el-icon-plus" size="mini" @click="add(scope.row)" title="添加下级节点"/>
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="edit(scope.row)" title="修改"/>

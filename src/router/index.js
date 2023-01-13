@@ -4,6 +4,7 @@ import Layout from '@/layout/BasicLayout.vue'
 import DashBoard from '@/views/dashboard/Index.vue'
 import Login from '@/views/login/Login.vue'
 import store from '@/store/index'
+import MenuIndex from '@/views/menu/Index.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,12 @@ const routes = [
         meta: {
           requireAuth: true
         }
+      },
+      // 设置菜单列表的路由
+      {
+        path: '/menus',
+        name: 'menus',
+        component: MenuIndex
       }
     ]
   }

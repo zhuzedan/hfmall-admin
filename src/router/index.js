@@ -6,6 +6,7 @@ import Login from '@/views/login/Login.vue'
 import store from '@/store/index'
 import MenuIndex from '@/views/menu/Index.vue'
 import ProductIndex from '@/views/product/Index.vue'
+import OrderIndex from '@/views/order/Index.vue'
 
 Vue.use(VueRouter)
 
@@ -41,6 +42,11 @@ const routes = [
         path: '/products',
         name: 'products',
         component: ProductIndex
+      },
+      {
+        path: '/orders',
+        name: 'orders',
+        component: OrderIndex
       }
     ]
   }

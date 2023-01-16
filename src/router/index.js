@@ -7,6 +7,7 @@ import store from '@/store/index'
 import MenuIndex from '@/views/menu/Index.vue'
 import ProductIndex from '@/views/product/Index.vue'
 import OrderIndex from '@/views/order/Index.vue'
+import RuleIndex from '@/views/role/Index.vue'
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,11 @@ const routes = [
         path: '/menus',
         name: 'menus',
         component: MenuIndex
+      },
+      {
+        path: '/roles',
+        name: 'roles',
+        component: RuleIndex
       },
       {
         path: '/products',

@@ -28,7 +28,7 @@
           <el-button type="primary" size="mini" @click="resetData">重置</el-button>
         </el-form-item>
       </el-form>
-
+      <el-button size="mini" @click="handleDialog(0)">添加角色</el-button>
       <el-table
         :data="queryResult.data"
         v-loading="listLoading"
@@ -43,9 +43,9 @@
         <el-table-column prop="description" label="描述" width="300" />
         <el-table-column prop="createTime" label="创建时间" width="200" />
         <el-table-column label="操作" width="190">
-          <template>
-            <el-button type="primary" size="mini">编辑</el-button>
-            <el-button type="danger" size="mini">删除</el-button>
+          <template v-slot="scope">
+            <el-button type="primary" size="mini" @click="handleDialog(scope.row.id)">编辑</el-button>
+            <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -59,11 +59,13 @@
         :total="queryResult.totalCount"
       >
       </el-pagination>
+      <role-create-or-edit ref="roleDlg" @role-change="loadSources"></role-create-or-edit>
     </el-card>
   </div>
 </template>
 <script>
-import { getRolePage } from '@/api/role'
+import { getRolePage,deleteRoleById } from '@/api/role'
+import RoleCreateOrEdit from './EditModel.vue'
 export default {
   data () {
     return {
@@ -128,12 +130,15 @@ export default {
       }
     }
   },
-  components: {},
+  components: {
+    RoleCreateOrEdit
+  },
   mounted () {},
   created () {
     this.loadSources()
   },
   methods: {
+    // 加载数据
     loadSources () {
       getRolePage(this.queryParams).then((res) => {
         if ((res.data.code = 200)) {
@@ -147,11 +152,33 @@ export default {
         }
       })
     },
+    // 重置按钮
     resetData() {
       this.queryParams.roleName = '',
       this.queryParams.startCreateTime = '',
       this.queryParams.endCreateTime = ''
       this.loadSources()
+    },
+    // 编辑、添加角色
+    handleDialog(roleId) {
+      this.$refs.roleDlg.showAndInit(roleId)
+    },
+    // 删除某个角色
+    handleDelete(id) {
+      this.$confirm('确认要删除该角色吗','删除提示')
+        .then(() => {
+          deleteRoleById(id).then((res) => {
+            if(res.data.code == 200) {
+              this.$message.success('删除角色成功')
+              this.loadSources()
+            }else {
+              this.$message.error('删除角色失败')
+            }
+          })
+        })
+        .catch(() => {
+          this.$message.info('取消删除该角色')
+        })
     },
     // 改变每页显示的记录数
     handleSizeChange (val) {
@@ -167,5 +194,10 @@ export default {
 }
 </script>
 <style scoped lang='scss'>
-
+  .el-form{
+    height: 50px;
+  }
+  .el-table {
+    margin-top: 10px;
+  }
 </style>

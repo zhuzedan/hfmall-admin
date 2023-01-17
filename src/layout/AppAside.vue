@@ -9,6 +9,7 @@
         <template slot="title"><i class="el-icon-message"></i>系统管理</template>
         <el-menu-item index="/menus">菜单管理</el-menu-item>
         <el-menu-item index="/roles">角色管理</el-menu-item>
+        <el-menu-item index="/users">用户管理</el-menu-item>
       </el-submenu>
       <el-submenu index="2">
         <template slot="title"><i class="el-icon-menu"></i>日志管理</template>

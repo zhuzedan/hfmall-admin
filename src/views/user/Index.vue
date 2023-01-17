@@ -4,9 +4,9 @@
       <el-row>
         <el-form :inline="true" :model="queryParams">
           <el-col :span="6">
-            <el-form-item label="角色名">
+            <el-form-item label="用户名">
               <el-input
-                v-model="queryParams.roleName"
+                v-model="queryParams.username"
                 size="small"
                 clearable
                 placeholder="输入角色名"
@@ -14,7 +14,18 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="6">
+            <el-form-item label="手机号">
+              <el-input
+                v-model="queryParams.phone"
+                size="small"
+                clearable
+                placeholder="输入手机号"
+                style="width: 100%;"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="创建时间">
               <el-date-picker
                 v-model="dateArr"
@@ -45,12 +56,21 @@
         lazy
         :default-expand-all="false"
       >
-        <el-table-column prop="id" label="编号"  />
-        <el-table-column prop="roleName" label="角色名" />
-        <el-table-column prop="roleCode" label="角色编码"/>
-        <el-table-column prop="description" label="描述"  width="400px"/>
-        <el-table-column prop="createTime" label="创建时间"  />
-        <el-table-column label="操作" >
+        <el-table-column prop="id" label="编号" width="100px" />
+        <el-table-column prop="username" label="用户名" />
+        <el-table-column prop="headUrl" label="头像" v-slot="scope">
+          <el-avatar shape="square" :src="scope.row.headUrl || defaultFace"></el-avatar>
+        </el-table-column>
+        <el-table-column prop="phone" label="手机号"/>
+        <el-table-column prop="description" label="描述"/>
+        <el-table-column prop="createTime" label="注册时间"/>
+        <el-table-column label="状态" v-slot="scope">
+          <el-switch
+            v-model="scope.row.status===1"
+            @change="handleChangeStatus(scope.row)">
+          </el-switch>
+        </el-table-column>
+        <el-table-column label="操作">
           <template v-slot="scope">
             <el-button type="primary" size="mini" @click="handleDialog(scope.row.id)">编辑</el-button>
             <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
@@ -67,13 +87,11 @@
         :total="queryResult.totalCount"
       >
       </el-pagination>
-      <edit-model ref="roleDlg" @role-change="loadSources"/>
     </el-card>
   </div>
 </template>
 <script>
-import { getRolePage,deleteRoleById } from '@/api/role'
-import EditModel from './EditModel.vue'
+import { getUserPage,updateStatus } from '@/api/user'
 export default {
   data () {
     return {
@@ -83,12 +101,15 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        roleName: '',
+        username: '',
+        phone: '',
         startCreateTime: '',
         endCreateTime: ''
       },
       // 查询的结果
       queryResult: {},
+      // 定义头像默认值
+      defaultFace: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       // 日期选择器
       dateArr: [],
       pickerOptions: {
@@ -139,7 +160,6 @@ export default {
     }
   },
   components: {
-    EditModel
   },
   mounted () {},
   created () {
@@ -148,7 +168,7 @@ export default {
   methods: {
     // 加载数据
     loadSources () {
-      getRolePage(this.queryParams).then((res) => {
+      getUserPage(this.queryParams).then((res) => {
         if ((res.data.code = 200)) {
           this.listLoading = false
           const { pageNum, pageSize, totalCount, totalPage, data } =
@@ -162,7 +182,8 @@ export default {
     },
     // 重置按钮
     resetData() {
-      this.queryParams.roleName = '',
+      this.queryParams.username = '',
+      this.queryParams.phone = '',
       this.queryParams.startCreateTime = '',
       this.queryParams.endCreateTime = ''
       this.loadSources()
@@ -173,20 +194,33 @@ export default {
     },
     // 删除某个角色
     handleDelete(id) {
-      this.$confirm('确认要删除该角色吗','删除提示')
+      this.$confirm('确认要删除该用户吗','删除提示')
         .then(() => {
           deleteRoleById(id).then((res) => {
             if(res.data.code == 200) {
-              this.$message.success('删除角色成功')
+              this.$message.success('删除用户成功')
               this.loadSources()
             }else {
-              this.$message.error('删除角色失败')
+              this.$message.error('删除用户失败')
             }
           })
         })
         .catch(() => {
-          this.$message.info('取消删除该角色')
+          this.$message.info('取消删除该用户')
         })
+    },
+    // 改变用户状态
+    handleChangeStatus(row) {
+      row.status= row.status ===1?0:1
+      const info = row.status === 1?'启用':'禁用'
+      updateStatus(row.id,row.status).then((res) => {
+        if(res.data.code == 200) {
+          this.$message.success(`状态${info}成功`)
+          this.loadSources()
+        }else {
+          this.$message.error('切换状态失败')
+        }
+      })
     },
     // 改变每页显示的记录数
     handleSizeChange (val) {

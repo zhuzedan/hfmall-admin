@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
 // 登录
 export const login = (formData) => {
@@ -14,5 +15,22 @@ export const getUserInfo = () => {
   return request({
     method: 'GET',
     url: '/systemuser/info'
+  })
+}
+
+// 获取分页用户列表
+export const getUserPage = (data = {}) => {
+  return request({
+    method: 'POST',
+    url: '/systemUser/queryPage',
+    data: qs.stringify(data)
+  })
+}
+
+// 更改用户状态
+export const updateStatus = (id,status) => {
+  return request({
+    method: 'GET',
+    url: '/systemUser/updateStatus?id='+id+'&status='+status
   })
 }

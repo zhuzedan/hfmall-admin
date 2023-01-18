@@ -11,6 +11,7 @@
                 clearable
                 placeholder="输入角色名"
                 style="width: 100%;"
+                @keyup.enter.native="loadSources"
               />
             </el-form-item>
           </el-col>
@@ -22,6 +23,7 @@
                 clearable
                 placeholder="输入手机号"
                 style="width: 100%;"
+                @keyup.enter.native="loadSources"
               />
             </el-form-item>
           </el-col>
@@ -87,11 +89,13 @@
         :total="queryResult.totalCount"
       >
       </el-pagination>
+      <edit-model ref="userDlg" @ok="loadSources"/>
     </el-card>
   </div>
 </template>
 <script>
-import { getUserPage,updateStatus } from '@/api/user'
+import { getUserPage,updateStatus,deleteUserById } from '@/api/user'
+import EditModel from './EditModel.vue'
 export default {
   data () {
     return {
@@ -160,6 +164,7 @@ export default {
     }
   },
   components: {
+    EditModel
   },
   mounted () {},
   created () {
@@ -188,15 +193,15 @@ export default {
       this.queryParams.endCreateTime = ''
       this.loadSources()
     },
-    // 编辑、添加角色
+    // 编辑、添加用户
     handleDialog(roleId) {
-      this.$refs.roleDlg.showAndInit(roleId)
+      this.$refs.userDlg.showAndInit(roleId)
     },
-    // 删除某个角色
+    // 删除某个用户
     handleDelete(id) {
       this.$confirm('确认要删除该用户吗','删除提示')
         .then(() => {
-          deleteRoleById(id).then((res) => {
+          deleteUserById(id).then((res) => {
             if(res.data.code == 200) {
               this.$message.success('删除用户成功')
               this.loadSources()

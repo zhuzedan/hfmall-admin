@@ -34,3 +34,11 @@ export const updateStatus = (id,status) => {
     url: '/systemUser/updateStatus?id='+id+'&status='+status
   })
 }
+
+// 删除单个用户
+export const deleteUserById = (id) => {
+  return request({
+    method: 'DELETE',
+    url: '/systemUser/delete?id='+id
+  })
+}

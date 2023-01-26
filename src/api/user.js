@@ -59,11 +59,29 @@ export const updateUserById = (data) => {
     data
   })
 }
-// 新增角色
+// 新增用户
 export const insertUser = (data) => {
   return request({
     method: 'POST',
     url: '/systemUser/save',
+    data
+  })
+}
+// 获取用户角色
+export const toAssignUser = (userId) => {
+  return request({
+    method: 'GET',
+    url: '/systemUser/toAssign',
+    params: {
+      userId
+    }
+  })
+}
+// 给用户分配角色
+export const doAssignUser = (data = {}) => {
+  return request({
+    method: 'POST',
+    url: '/systemUser/doAssign',
     data
   })
 }

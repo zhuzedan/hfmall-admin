@@ -14,18 +14,42 @@
         <el-input v-model="formData.phone" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
-        <el-input type="textarea" v-model="formData.description" autocomplete="off"></el-input>
+        <el-input
+          type="textarea"
+          v-model="formData.description"
+          autocomplete="off"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="分配角色" :label-width="formLabelWidth">
+        <el-select
+          v-model="formData.userRoleIds"
+          multiple
+          placeholder="请选择角色"
+        >
+          <el-option
+            v-for="role in allRoles"
+            :key="role.id"
+            :label="role.roleName"
+            :value="role.id"
+            >{{ role.roleName }}</el-option
+          >
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="onSubmit">确 定</el-button
-      >
+      <el-button type="primary" @click="onSubmit">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
-import { readUserById,updateUserById,insertUser } from '@/api/user.js'
+import {
+  readUserById,
+  updateUserById,
+  insertUser,
+  toAssignUser,
+  doAssignUser
+} from '@/api/user.js'
 export default {
   name: 'EditModel',
   data () {
@@ -38,8 +62,11 @@ export default {
         email: '',
         phone: '',
         description: '',
-        id: undefined
+        id: undefined,
+        userId: 0,
+        userRoleIds: []
       },
+      allRoles: [],
       isLoading: false,
       formLabelWidth: '120px'
     }
@@ -47,51 +74,67 @@ export default {
   components: {},
   mounted () {},
   computed: {
-    currentTitle() {
+    currentTitle () {
       return this.isCreate ? '添加用户' : '编辑用户'
     }
   },
   methods: {
-    showAndInit(roleId) {
-      this.formData.id = roleId
-      this.isCreate = !roleId
+    showAndInit (userId) {
+      this.formData.id = userId
+      this.isCreate = !userId
       this.dialogFormVisible = true
-      if(this.isCreate) {
+      if (this.isCreate) {
         // 添加，把表单数据清空
         this.formData = {}
-      }
-      else {
+      } else {
         // 编辑，显示要编辑的信息
         this.isLoading = true
-        readUserById(roleId).then((res) => {
-          if(res.data.code == 200) {
-            console.log(res.data)
-            const {id,username,nickname,email,phone,description} = res.data.data
-            this.formData = {id,username,nickname,email,phone,description}
+        readUserById(userId)
+          .then((res) => {
+            if (res.data.code == 200) {
+              // console.log(res.data)
+              const { id, username, nickname, email, phone, description } =
+                res.data.data
+              this.formData = {
+                id,
+                username,
+                nickname,
+                email,
+                phone,
+                description
+              }
+            }
+          })
+          .finally(() => {
+            this.isLoading = false
+          }),
+        toAssignUser(userId).then((res) => {
+          if (res.data.code == 200) {
+            this.allRoles = res.data.data.allRoles
+            this.formData.userRoleIds = res.data.data.userRoleIds
+            this.userId = userId
           }
-        }).finally(() => {
-          this.isLoading = false
         })
       }
     },
-    onSubmit() {
-      if(this.isCreate) {
+    onSubmit () {
+      if (this.isCreate) {
         insertUser(this.formData).then((res) => {
-          if(res.data.code == 200) {
+          if (res.data.code == 200) {
             this.$message.success('新增成功')
             this.dialogFormVisible = false
             this.$emit('ok')
-          }else {
+          } else {
             this.$message.error('新增失败')
           }
         })
-      }else {
+      } else {
         updateUserById(this.formData).then((res) => {
-          if(res.data.code == 200) {
+          if (res.data.code == 200) {
             this.$message.success('编辑成功')
             this.dialogFormVisible = false
             this.$emit('ok')
-          }else {
+          } else {
             this.$message.error('编辑失败')
           }
         })

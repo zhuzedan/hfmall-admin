@@ -42,3 +42,28 @@ export const deleteUserById = (id) => {
     url: '/systemUser/delete?id='+id
   })
 }
+
+// 获取单个用户
+export const readUserById = (id) => {
+  return request({
+    method: 'GET',
+    url: '/systemUser/read?id='+id
+  })
+}
+
+// 编辑单个用户
+export const updateUserById = (data) => {
+  return request({
+    method: 'POST',
+    url: '/systemUser/update',
+    data
+  })
+}
+// 新增角色
+export const insertUser = (data) => {
+  return request({
+    method: 'POST',
+    url: '/systemUser/save',
+    data
+  })
+}

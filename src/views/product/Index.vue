@@ -86,7 +86,7 @@
   </div>
 </template>
 <script>
-import { getProductPage } from '@/api/product'
+import { getProductPage,deleteProductById } from '@/api/product'
 import EditModel from './EditModel.vue'
 export default {
   data () {
@@ -154,25 +154,25 @@ export default {
       (this.queryParams.endCreateTime = '')
       this.loadSources()
     },
-    // 编辑、添加角色
+    // 编辑、添加商品
     handleDialog (roleId) {
       this.$refs.roleDlg.showAndInit(roleId)
     },
-    // 删除某个角色
+    // 删除某个商品
     handleDelete (id) {
-      this.$confirm('确认要删除该角色吗', '删除提示')
+      this.$confirm('确认要删除该商品吗', '删除提示')
         .then(() => {
-          deleteRoleById(id).then((res) => {
+          deleteProductById(id).then((res) => {
             if (res.data.code == 200) {
-              this.$message.success('删除角色成功')
+              this.$message.success('删除商品成功')
               this.loadSources()
             } else {
-              this.$message.error('删除角色失败')
+              this.$message.error('删除商品失败')
             }
           })
         })
         .catch(() => {
-          this.$message.info('取消删除该角色')
+          this.$message.info('取消删除该商品')
         })
     },
     // 改变每页显示的记录数

@@ -1,13 +1,16 @@
 <template>
   <el-dialog :title="currentTitle" :visible.sync="dialogFormVisible">
     <el-form :model="formData" v-loading="isLoading">
-      <el-form-item label="角色名称" :label-width="formLabelWidth">
-        <el-input v-model="formData.roleName" autocomplete="off"></el-input>
+      <el-form-item label="商品名称" :label-width="formLabelWidth">
+        <el-input v-model="formData.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="角色编码" :label-width="formLabelWidth">
-        <el-input v-model="formData.roleCode" autocomplete="off"></el-input>
+      <el-form-item label="商品价格" :label-width="formLabelWidth">
+        <el-input v-model="formData.price" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="角色描述" :label-width="formLabelWidth">
+      <el-form-item label="商品库存" :label-width="formLabelWidth">
+        <el-input v-model="formData.stock" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="商品描述" :label-width="formLabelWidth">
         <el-input type="textarea" v-model="formData.description" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
@@ -19,7 +22,7 @@
   </el-dialog>
 </template>
 <script>
-import { readRoleById,updateRoleById,insertRole } from '@/api/role.js'
+import { readProductById,updateProductById,insertProduct } from '@/api/product.js'
 export default {
   name: 'EditModel',
   data () {
@@ -27,8 +30,9 @@ export default {
       isCreate: true,
       dialogFormVisible: false,
       formData: {
-        roleName: '',
-        roleCode: '',
+        name: '',
+        price: '',
+        stock: '',
         description: '',
         id: undefined
       },
@@ -40,7 +44,7 @@ export default {
   mounted () {},
   computed: {
     currentTitle() {
-      return this.isCreate ? '添加角色' : '编辑角色'
+      return this.isCreate ? '添加商品' : '编辑商品'
     }
   },
   methods: {
@@ -55,11 +59,11 @@ export default {
       else {
         // 编辑，显示要编辑的信息
         this.isLoading = true
-        readRoleById(roleId).then((res) => {
+        readProductById(roleId).then((res) => {
           if(res.data.code == 200) {
             console.log(res.data)
-            const {id,roleName,roleCode,description} = res.data.data
-            this.formData = {id,roleName,roleCode,description}
+            const {id,name,price,stock,description} = res.data.data
+            this.formData = {id,name,price,stock,description}
           }
         }).finally(() => {
           this.isLoading = false
@@ -68,7 +72,7 @@ export default {
     },
     onSubmit() {
       if(this.isCreate) {
-        insertRole(this.formData).then((res) => {
+        insertProduct(this.formData).then((res) => {
           if(res.data.code == 200) {
             this.$message.success('新增成功')
             this.dialogFormVisible = false
@@ -78,7 +82,7 @@ export default {
           }
         })
       }else {
-        updateRoleById(this.formData).then((res) => {
+        updateProductById(this.formData).then((res) => {
           if(res.data.code == 200) {
             this.$message.success('编辑成功')
             this.dialogFormVisible = false

@@ -63,7 +63,7 @@ export const updateUserById = (data) => {
 export const insertUser = (data) => {
   return request({
     method: 'POST',
-    url: '/systemUser/save',
+    url: '/systemUser/insert',
     data
   })
 }

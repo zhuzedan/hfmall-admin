@@ -2,12 +2,12 @@
   <div class="app-header">
     <i class="el-icon-s-fold" @click="toggleCollapse"></i>
 
-    <el-breadcrumb separator="/">
+    <!-- <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
       <el-breadcrumb-item>活动列表</el-breadcrumb-item>
       <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
     <el-dropdown>
       <span class="el-dropdown-link">
         <el-avatar

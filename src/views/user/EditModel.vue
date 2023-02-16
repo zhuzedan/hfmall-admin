@@ -58,6 +58,7 @@ export default {
       dialogFormVisible: false,
       formData: {
         username: '',
+        password: '',
         nickname: '',
         email: '',
         phone: '',

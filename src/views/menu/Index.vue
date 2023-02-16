@@ -1,15 +1,12 @@
 <template>
   <div>
-    <!-- 工具条 -->
-    <div class="tools-div">
-    </div>
     <el-card shadow="always">
       <el-button style="margin-bottom:20px" type="success" icon="el-icon-plus" size="mini" @click="add()">添 加</el-button>
       <el-table
       :data="sysMenuList"
-      style="font-size: 10px"
       row-key="id"
       lazy
+      style="width: 100%"
       :default-expand-all="false"
       :tree-props="{children: 'children'}">
 
@@ -19,11 +16,11 @@
           <i :class="scope.row.icon"></i>
         </template>
       </el-table-column>
-      <el-table-column prop="perms" label="权限标识" width="160"/>
-      <el-table-column prop="path" label="路由地址" width="120"/>
-      <el-table-column prop="component" label="组件路径" width="160"/>
-      <el-table-column prop="sortValue" label="排序" width="60"/>
-      <el-table-column label="状态" width="80">
+      <el-table-column prop="perms" label="权限标识"/>
+      <el-table-column prop="path" label="路由地址"/>
+      <el-table-column prop="component" label="组件路径"/>
+      <el-table-column prop="sortValue" label="排序"/>
+      <el-table-column label="状态" >
         <template>
           <el-switch
              disabled="true">

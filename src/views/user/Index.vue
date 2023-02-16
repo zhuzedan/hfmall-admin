@@ -50,7 +50,7 @@
           </el-col>
         </el-form>
       </el-row>
-      <el-button size="mini" type="success" icon="el-icon-plus" @click="handleDialog(0)">添加</el-button>
+      <!-- <el-button size="mini" type="success" icon="el-icon-plus" @click="handleDialog(0)">添加</el-button> -->
       <el-table
         :data="queryResult.data"
         v-loading="listLoading"
@@ -66,12 +66,6 @@
         <el-table-column prop="phone" label="手机号"/>
         <el-table-column prop="description" label="描述"/>
         <el-table-column prop="createTime" label="注册时间"/>
-        <el-table-column label="状态" v-slot="scope">
-          <el-switch
-            v-model="scope.row.status===1"
-            @change="handleChangeStatus(scope.row)">
-          </el-switch>
-        </el-table-column>
         <el-table-column label="操作">
           <template v-slot="scope">
             <el-button type="primary" size="mini" @click="handleDialog(scope.row.id)">编辑</el-button>
@@ -94,7 +88,7 @@
   </div>
 </template>
 <script>
-import { getUserPage,updateStatus,deleteUserById } from '@/api/user'
+import { getUserPage,deleteUserById } from '@/api/user'
 import EditModel from './EditModel.vue'
 export default {
   data () {
@@ -213,19 +207,6 @@ export default {
         .catch(() => {
           this.$message.info('取消删除该用户')
         })
-    },
-    // 改变用户状态
-    handleChangeStatus(row) {
-      row.status= row.status ===1?0:1
-      const info = row.status === 1?'启用':'禁用'
-      updateStatus(row.id,row.status).then((res) => {
-        if(res.data.code == 200) {
-          this.$message.success(`状态${info}成功`)
-          this.loadSources()
-        }else {
-          this.$message.error('切换状态失败')
-        }
-      })
     },
     // 改变每页显示的记录数
     handleSizeChange (val) {

@@ -9,6 +9,8 @@ import ProductIndex from '@/views/product/Index.vue'
 import OrderIndex from '@/views/order/Index.vue'
 import RuleIndex from '@/views/role/Index.vue'
 import UserIndex from '@/views/user/Index.vue'
+import Category from '@/views/category/Index.vue'
+import SwiperIndex from '@/views/swiper/Index.vue'
 
 Vue.use(VueRouter)
 
@@ -59,6 +61,16 @@ const routes = [
         path: '/users',
         name: 'users',
         component: UserIndex
+      },
+      {
+        path: '/category',
+        name: 'category',
+        component: Category
+      },
+      {
+        path: '/swiper',
+        name: 'swiper',
+        component: SwiperIndex
       }
     ]
   }

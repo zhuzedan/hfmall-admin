@@ -9,11 +9,12 @@
         :default-expand-all="false"
       >
         <el-table-column prop="id" label="编号" width="80" />
-        <el-table-column prop="order_id" label="商品名称" width="200" />
-        <el-table-column prop="user_id" label="商品图片" width="200" />
-        <el-table-column prop="total_price" label="价格" width="200" />
-        <el-table-column prop="receiver_address" label="收货地址" width="200" />
-        <el-table-column prop="receiver_name" label="收货人" width="200" />
+        <el-table-column prop="orderId" label="商品名称" width="200" />
+        <el-table-column prop="receiverPhone" label="联系电话" width="200" />
+        <el-table-column prop="totalPrice" label="价格" width="200" />
+        <el-table-column prop="receiverAddress" label="收货地址" width="200" />
+        <el-table-column prop="receiverName" label="收货人" width="200" />
+        <el-table-column prop="createTime" label="订单创建时间" width="200" />
         <el-table-column label="操作" width="190">
           <template>
             <el-button size="mini">编辑</el-button>

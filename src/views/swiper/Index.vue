@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-card shadow="always">
+      <el-button size="mini" type="success" icon="el-icon-plus" @click="handleDialog(0)">添加</el-button>
       <el-table
         :data="queryResult.data"
         v-loading="listLoading"
@@ -9,13 +10,17 @@
         :default-expand-all="false"
       >
         <el-table-column prop="id" label="编号" width="100px" />
-        <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="headUrl" label="头像" v-slot="scope">
-          <el-avatar shape="square" :src="scope.row.headUrl || defaultFace"></el-avatar>
+        <el-table-column prop="name" label="名称" />
+        <el-table-column label="图片" align="center">
+          <template slot-scope="scope">
+            <img
+              width="80"
+              height="80"
+              :src="'http://localhost:8888/image' + scope.row.pic"
+            />
+          </template>
         </el-table-column>
-        <el-table-column prop="phone" label="手机号"/>
-        <el-table-column prop="description" label="描述"/>
-        <el-table-column prop="createTime" label="注册时间"/>
+        <el-table-column prop="createTime" label="创建时间"/>
         <el-table-column label="操作">
           <template v-slot="scope">
             <el-button type="primary" size="mini" @click="handleDialog(scope.row.id)">编辑</el-button>
@@ -38,7 +43,7 @@
   </div>
 </template>
 <script>
-import { getUserPage,deleteUserById } from '@/api/user'
+import { getSwiperPage,deleteSwiperById } from '@/api/swiper'
 import EditModel from './EditModel.vue'
 export default {
   data () {
@@ -48,11 +53,7 @@ export default {
       // 查询的条件
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
-        username: '',
-        phone: '',
-        startCreateTime: '',
-        endCreateTime: ''
+        pageSize: 10
       },
       // 查询的结果
       queryResult: {},
@@ -117,7 +118,7 @@ export default {
   methods: {
     // 加载数据
     loadSources () {
-      getUserPage(this.queryParams).then((res) => {
+      getSwiperPage(this.queryParams).then((res) => {
         if ((res.data.code = 200)) {
           this.listLoading = false
           const { pageNum, pageSize, totalCount, totalPage, data } =
@@ -143,19 +144,19 @@ export default {
     },
     // 删除某个用户
     handleDelete(id) {
-      this.$confirm('确认要删除该用户吗','删除提示')
+      this.$confirm('确认要删除该轮播图吗','删除提示')
         .then(() => {
-          deleteUserById(id).then((res) => {
+          deleteSwiperById(id).then((res) => {
             if(res.data.code == 200) {
-              this.$message.success('删除用户成功')
+              this.$message.success('删除成功')
               this.loadSources()
             }else {
-              this.$message.error('删除用户失败')
+              this.$message.error('删除失败')
             }
           })
         })
         .catch(() => {
-          this.$message.info('取消删除该用户')
+          this.$message.info('取消删除该条')
         })
     },
     // 改变每页显示的记录数

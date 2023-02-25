@@ -3,7 +3,7 @@
     <el-card shadow="always">
       <el-table
         :data="queryResult.data"
-        style="font-size: 10px; width: 100%"
+        style="width: 100%"
         row-key="id"
         lazy
         :default-expand-all="false"
@@ -15,10 +15,9 @@
         <el-table-column prop="receiverAddress" label="收货地址" width="200" />
         <el-table-column prop="receiverName" label="收货人" width="200" />
         <el-table-column prop="createTime" label="订单创建时间" width="200" />
-        <el-table-column label="操作" width="190">
-          <template>
-            <el-button size="mini">编辑</el-button>
-            <el-button danger size="mini">删除</el-button>
+        <el-table-column label="操作">
+          <template v-slot="scope">
+            <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -36,7 +35,7 @@
   </div>
 </template>
 <script>
-import { getOrderPage } from '@/api/order'
+import { getOrderPage,deleteOrderById } from '@/api/order'
 export default {
   data () {
     return {
@@ -67,6 +66,23 @@ export default {
         }
         console.log(res)
       })
+    },
+    // 删除某个订单
+    handleDelete(id) {
+      this.$confirm('确认要删除该订单吗','删除提示')
+        .then(() => {
+          deleteOrderById(id).then((res) => {
+            if(res.data.code == 200) {
+              this.$message.success('删除成功')
+              this.loadSources()
+            }else {
+              this.$message.error('删除失败')
+            }
+          })
+        })
+        .catch(() => {
+          this.$message.info('取消删除该条')
+        })
     },
     // 改变每页显示的记录数
     handleSizeChange (val) {

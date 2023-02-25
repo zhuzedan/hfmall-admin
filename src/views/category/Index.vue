@@ -7,7 +7,7 @@
       lazy
       style="width: 100%"
       :default-expand-all="false"
-      :tree-props="{children: 'subCategoryList'}">
+      >
 
       <el-table-column prop="name" label="名称" width="160"/>
       <el-table-column prop="remark" label="标识"/>

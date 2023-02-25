@@ -1,39 +1,20 @@
 <template>
   <el-dialog :title="currentTitle" :visible.sync="dialogFormVisible">
     <el-form :model="formData" v-loading="isLoading">
-      <el-form-item label="用户名" :label-width="formLabelWidth">
-        <el-input v-model="formData.username" autocomplete="off"></el-input>
+      <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-input v-model="formData.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="昵称" :label-width="formLabelWidth">
-        <el-input v-model="formData.nickname" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱" :label-width="formLabelWidth">
-        <el-input v-model="formData.email" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号" :label-width="formLabelWidth">
-        <el-input v-model="formData.phone" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="描述" :label-width="formLabelWidth">
-        <el-input
-          type="textarea"
-          v-model="formData.description"
-          autocomplete="off"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="分配角色" :label-width="formLabelWidth">
-        <el-select
-          v-model="formData.userRoleIds"
-          multiple
-          placeholder="请选择角色"
-        >
-          <el-option
-            v-for="role in allRoles"
-            :key="role.id"
-            :label="role.roleName"
-            :value="role.id"
-            >{{ role.roleName }}</el-option
-          >
-        </el-select>
+      <el-form-item label="图片" :label-width="formLabelWidth">
+        <el-input v-model="formData.pic" autocomplete="off"></el-input>
+        <el-table-column label="图片" align="center">
+          <template>
+            <img
+              width="80"
+              height="80"
+              :src="'http://localhost:8888/image' + formData.pic"
+            />
+          </template>
+        </el-table-column>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -44,12 +25,10 @@
 </template>
 <script>
 import {
-  readUserById,
-  updateUserById,
-  insertUser,
-  toAssignUser,
-  doAssignUser
-} from '@/api/user.js'
+  readSwiperById,
+  insertSwiper,
+  updateSwiperById,
+} from '@/api/swiper.js'
 export default {
   name: 'EditModel',
   data () {
@@ -57,15 +36,11 @@ export default {
       isCreate: true,
       dialogFormVisible: false,
       formData: {
-        username: '',
+        name: '',
         password: '',
-        nickname: '',
-        email: '',
-        phone: '',
-        description: '',
+        pic: '',
         id: undefined,
         userId: 0,
-        userRoleIds: []
       },
       allRoles: [],
       isLoading: false,
@@ -76,7 +51,7 @@ export default {
   mounted () {},
   computed: {
     currentTitle () {
-      return this.isCreate ? '添加用户' : '编辑用户'
+      return this.isCreate ? '添加轮播图' : '编辑轮播图'
     }
   },
   methods: {
@@ -90,37 +65,26 @@ export default {
       } else {
         // 编辑，显示要编辑的信息
         this.isLoading = true
-        readUserById(userId)
+        readSwiperById(userId)
           .then((res) => {
             if (res.data.code == 200) {
-              // console.log(res.data)
-              const { id, username, nickname, email, phone, description } =
+              const { id, name, pic } =
                 res.data.data
               this.formData = {
                 id,
-                username,
-                nickname,
-                email,
-                phone,
-                description
+                name,
+                pic
               }
             }
           })
           .finally(() => {
             this.isLoading = false
-          }),
-        toAssignUser(userId).then((res) => {
-          if (res.data.code == 200) {
-            this.allRoles = res.data.data.allRoles
-            this.formData.userRoleIds = res.data.data.userRoleIds
-            this.userId = userId
-          }
-        })
+          })
       }
     },
     onSubmit () {
       if (this.isCreate) {
-        insertUser(this.formData).then((res) => {
+        insertSwiper(this.formData).then((res) => {
           if (res.data.code == 200) {
             this.$message.success('新增成功')
             this.dialogFormVisible = false
@@ -130,7 +94,7 @@ export default {
           }
         })
       } else {
-        updateUserById(this.formData).then((res) => {
+        updateSwiperById(this.formData).then((res) => {
           if (res.data.code == 200) {
             this.$message.success('编辑成功')
             this.dialogFormVisible = false

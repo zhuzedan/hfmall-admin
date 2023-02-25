@@ -4,6 +4,6 @@ import request from '@/utils/request'
 export const getSubCate = () => {
   return request({
     method: 'GET',
-    url: '/category/querySubCategories',
+    url: '/category/queryAll',
   })
 }

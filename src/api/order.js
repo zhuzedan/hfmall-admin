@@ -9,3 +9,11 @@ export const getOrderPage = (data = {}) => {
     data: qs.stringify(data)
   })
 }
+
+// 删除单个轮播图
+export const deleteOrderById = (id) => {
+  return request({
+    method: 'DELETE',
+    url: '/order/delete?id='+id
+  })
+}

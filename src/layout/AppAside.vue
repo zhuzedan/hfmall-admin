@@ -23,6 +23,7 @@
       <el-submenu index="5">
         <template slot="title"><i class="el-icon-share"></i>汉服相关</template>
         <el-menu-item index="/activity">汉服活动</el-menu-item>
+        <el-menu-item index="/news">汉服头条</el-menu-item>
       </el-submenu>
     </el-menu>
   </div>

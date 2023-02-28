@@ -12,6 +12,7 @@ import UserIndex from '@/views/user/Index.vue'
 import Category from '@/views/category/Index.vue'
 import SwiperIndex from '@/views/swiper/Index.vue'
 import ActivityIndex from '@/views/activity/Index.vue'
+import NewsIndex from '@/views/news/Index.vue'
 
 Vue.use(VueRouter)
 
@@ -77,6 +78,11 @@ const routes = [
         path: '/activity',
         name: 'activity',
         component: ActivityIndex
+      },
+      {
+        path: '/news',
+        name: 'news',
+        component: NewsIndex
       }
     ]
   }

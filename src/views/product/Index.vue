@@ -48,8 +48,8 @@
         <el-table-column label="图片" align="center">
           <template slot-scope="scope">
             <img
-              width="40"
-              height="40"
+              width="80"
+              height="80"
               :src="'http://localhost:8888/image/' + scope.row.propic"
             />
           </template>

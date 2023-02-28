@@ -4,12 +4,12 @@
       <el-row>
         <el-form :inline="true" :model="queryParams">
           <el-col :span="6">
-            <el-form-item label="活动名">
+            <el-form-item label="新闻名">
               <el-input
-                v-model="queryParams.name"
+                v-model="queryParams.title"
                 size="small"
                 clearable
-                placeholder="输入活动名"
+                placeholder="输入新闻名"
                 style="width: 100%;"
               />
             </el-form-item>
@@ -46,15 +46,14 @@
         :default-expand-all="false"
       >
         <el-table-column prop="id" label="编号"  />
-        <el-table-column prop="name" label="活动名称" />
-        <el-table-column prop="num" label="参与人数"/>
-        <el-table-column prop="funs" label="粉丝数"/>
+        <el-table-column prop="title" label="新闻名称" />
+        <el-table-column prop="content" label="内容"  width="400px"/>
         <el-table-column label="图片" align="center">
           <template slot-scope="scope">
             <img
               width="80"
               height="80"
-              :src="'http://localhost:8888/image/' + scope.row.img"
+              :src="'http://localhost:8888/image' + scope.row.image"
             />
           </template>
         </el-table-column>
@@ -81,7 +80,7 @@
   </div>
 </template>
 <script>
-import { getActivityPage,deleteActivityById } from '@/api/activity'
+import { getNewsPage,deleteNewsById } from '@/api/news'
 import EditModel from './EditModel.vue'
 export default {
   data () {
@@ -92,7 +91,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        name: '',
+        title: '',
         startCreateTime: '',
         endCreateTime: ''
       },
@@ -157,7 +156,7 @@ export default {
   methods: {
     // 加载数据
     loadSources () {
-      getActivityPage(this.queryParams).then((res) => {
+      getNewsPage(this.queryParams).then((res) => {
         if ((res.data.code = 200)) {
           this.listLoading = false
           const { pageNum, pageSize, totalCount, totalPage, data } =
@@ -171,7 +170,7 @@ export default {
     },
     // 重置按钮
     resetData() {
-      this.queryParams.name = '',
+      this.queryParams.title = '',
       this.queryParams.startCreateTime = '',
       this.queryParams.endCreateTime = ''
       this.loadSources()
@@ -182,19 +181,19 @@ export default {
     },
     // 删除某个角色
     handleDelete(id) {
-      this.$confirm('确认要删除该活动吗','删除提示')
+      this.$confirm('确认要删除该新闻吗','删除提示')
         .then(() => {
-          deleteActivityById(id).then((res) => {
+          deleteNewsById(id).then((res) => {
             if(res.data.code == 200) {
-              this.$message.success('删除活动成功')
+              this.$message.success('删除新闻成功')
               this.loadSources()
             }else {
-              this.$message.error('删除活动失败')
+              this.$message.error('删除新闻失败')
             }
           })
         })
         .catch(() => {
-          this.$message.info('取消删除该活动')
+          this.$message.info('取消删除该新闻')
         })
     },
     // 改变每页显示的记录数

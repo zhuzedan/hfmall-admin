@@ -1,16 +1,13 @@
 <template>
   <el-dialog :title="currentTitle" :visible.sync="dialogFormVisible">
     <el-form :model="formData" v-loading="isLoading">
-      <el-form-item label="活动名称" :label-width="formLabelWidth">
-        <el-input v-model="formData.name" autocomplete="off"></el-input>
+      <el-form-item label="新闻名称" :label-width="formLabelWidth">
+        <el-input v-model="formData.title" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="参与人数" :label-width="formLabelWidth">
-        <el-input v-model="formData.num" autocomplete="off"></el-input>
+      <el-form-item label="新闻内容" :label-width="formLabelWidth">
+        <el-input type="textarea" v-model="formData.content" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="粉丝数" :label-width="formLabelWidth">
-        <el-input  v-model="formData.funs" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="图片" :label-width="formLabelWidth">
+      <el-form-item label="新闻图片" :label-width="formLabelWidth">
         <el-upload
           action="http://localhost:8888/api/upload"
           list-type="picture-card"
@@ -34,7 +31,7 @@
   </el-dialog>
 </template>
 <script>
-import { readActivityById,updateActivityById,insertActivity } from '@/api/activity.js'
+import { readNewsById,updateNewsById,insertNews } from '@/api/news.js'
 export default {
   name: 'EditModel',
   data () {
@@ -44,10 +41,9 @@ export default {
       isCreate: true,
       dialogFormVisible: false,
       formData: {
-        name: '',
-        num: '',
-        funs: '',
-        img: '',
+        title: '',
+        content: '',
+        image: '',
         id: undefined
       },
       isLoading: false,
@@ -58,14 +54,14 @@ export default {
   mounted () {},
   computed: {
     currentTitle() {
-      return this.isCreate ? '添加活动' : '编辑活动'
+      return this.isCreate ? '添加新闻' : '编辑新闻'
     }
   },
   methods: {
     handleImgSuccess(response, file, fileList) {
       console.log('成功',response.data)
       console.log(response.data.slice(28))
-      this.formData.img = response.data.slice(28)
+      this.formData.image = response.data.slice(27)
     },
     handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -85,11 +81,11 @@ export default {
       else {
         // 编辑，显示要编辑的信息
         this.isLoading = true
-        readActivityById(roleId).then((res) => {
+        readNewsById(roleId).then((res) => {
           if(res.data.code == 200) {
             console.log(res.data)
-            const {id,name,num,funs,img} = res.data.data
-            this.formData = {id,name,num,funs,img}
+            const {id,title,content,image} = res.data.data
+            this.formData = {id,title,content,image}
           }
         }).finally(() => {
           this.isLoading = false
@@ -98,7 +94,7 @@ export default {
     },
     onSubmit() {
       if(this.isCreate) {
-        insertActivity(this.formData).then((res) => {
+        insertNews(this.formData).then((res) => {
           if(res.data.code == 200) {
             this.$message.success('新增成功')
             this.dialogFormVisible = false
@@ -108,7 +104,7 @@ export default {
           }
         })
       }else {
-        updateActivityById(this.formData).then((res) => {
+        updateNewsById(this.formData).then((res) => {
           if(res.data.code == 200) {
             this.$message.success('编辑成功')
             this.dialogFormVisible = false

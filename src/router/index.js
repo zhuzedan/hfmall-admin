@@ -11,6 +11,7 @@ import RuleIndex from '@/views/role/Index.vue'
 import UserIndex from '@/views/user/Index.vue'
 import Category from '@/views/category/Index.vue'
 import SwiperIndex from '@/views/swiper/Index.vue'
+import ActivityIndex from '@/views/activity/Index.vue'
 
 Vue.use(VueRouter)
 
@@ -71,6 +72,11 @@ const routes = [
         path: '/swiper',
         name: 'swiper',
         component: SwiperIndex
+      },
+      {
+        path: '/activity',
+        name: 'activity',
+        component: ActivityIndex
       }
     ]
   }

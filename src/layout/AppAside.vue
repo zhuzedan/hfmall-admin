@@ -20,6 +20,10 @@
         <template slot="title"><i class="el-icon-s-claim"></i>订单管理</template>
         <el-menu-item index="/orders">订单列表</el-menu-item>
       </el-submenu>
+      <el-submenu index="5">
+        <template slot="title"><i class="el-icon-share"></i>汉服相关</template>
+        <el-menu-item index="/activity">汉服活动</el-menu-item>
+      </el-submenu>
     </el-menu>
   </div>
 </template>

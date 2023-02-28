@@ -1,5 +1,5 @@
 <template>
-  <h1>首页仪表盘</h1>
+  <h1>欢迎登录系统</h1>
 </template>
 
 <script>
